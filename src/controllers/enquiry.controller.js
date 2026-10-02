@@ -75,7 +75,7 @@ export async function createEnquiry(req, res) {
 const queryString = (value) => (typeof value === 'string' ? value.trim() : '');
 
 /** Builds a MongoDB filter from admin search/filter query params. */
-function buildFilter(query) {
+export function buildFilter(query) {
   const filter = {};
 
   const search = queryString(query.search).slice(0, 100);
@@ -139,11 +139,11 @@ export async function updateEnquiry(req, res) {
     throw new AppError(400, 'Invalid status', { status: `Status must be one of: ${STATUSES.join(', ')}` });
   }
 
-  const enquiry = await findByIdOr404(req.params.id);
+  let enquiry = await findByIdOr404(req.params.id);
   const previous = enquiry.status;
   if (previous !== status) {
-    enquiry.status = status;
-    await enquiry.save();
+    // Update only the status, so older records stay editable even if the product list has changed since.
+    enquiry = await Enquiry.findByIdAndUpdate(enquiry._id, { status }, { returnDocument: 'after', runValidators: true });
     logger.info(`Status update ${enquiry.enquiryId}: ${previous} -> ${status} by ${req.admin.email}`);
   }
   res.json({ enquiry });

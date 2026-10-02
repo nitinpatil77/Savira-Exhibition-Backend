@@ -1,3 +1,5 @@
+import { OTHER_PRODUCT } from './constants.js';
+
 const pad = (n) => String(n).padStart(2, '0');
 
 /** Formats a date as "DD-MM-YYYY HH:mm" in the server timezone (APP_TIMEZONE). */
@@ -9,7 +11,7 @@ export function formatDateTime(date) {
 
 export function formatProducts(enquiry) {
   return enquiry.interestedProducts
-    .map((p) => (p === 'Other' && enquiry.otherProduct ? `Other (${enquiry.otherProduct})` : p))
+    .map((p) => (p === OTHER_PRODUCT && enquiry.otherProduct ? `${p} (${enquiry.otherProduct})` : p))
     .join(', ');
 }
 

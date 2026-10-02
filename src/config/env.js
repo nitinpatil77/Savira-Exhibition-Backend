@@ -40,6 +40,11 @@ const env = {
     from: process.env.SMTP_FROM || process.env.SMTP_USER,
   },
   adminNotificationEmail: process.env.ADMIN_NOTIFICATION_EMAIL || '',
+  // CC'd on every visitor thank-you email (comma separated)
+  thankYouCc: (process.env.THANK_YOU_CC_EMAILS || '')
+    .split(',')
+    .map((email) => email.trim())
+    .filter(Boolean),
 };
 
 export default env;

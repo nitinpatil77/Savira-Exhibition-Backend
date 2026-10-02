@@ -1,4 +1,4 @@
-import { PRODUCTS, DEMO_TIMELINES } from './constants.js';
+import { PRODUCTS, DEMO_TIMELINES, OTHER_PRODUCT } from './constants.js';
 
 // Practical email check: something@domain.tld, no spaces.
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -44,7 +44,7 @@ export function validateEnquiry(body = {}) {
   else if (interestedProducts.some((p) => !PRODUCTS.includes(p))) errors.interestedProducts = 'Invalid product selected';
 
   let otherProduct = '';
-  if (interestedProducts.includes('Other')) {
+  if (interestedProducts.includes(OTHER_PRODUCT)) {
     otherProduct = clean(body.otherProduct);
     if (!otherProduct) errors.otherProduct = 'Please specify the product';
     else if (otherProduct.length > 150) errors.otherProduct = 'Must be at most 150 characters';
